@@ -1,0 +1,28 @@
+siftDemoV4:
+
+1. Running program on images
+:: command: siftWin32 -display < (target PGM file) > (destination PGM file)
+:: image resolution should be controlled to control number of keypoints (e.g. image of size 500 pixels square => > 1000 keypoints), therefore reduce image resolution before performing SIFT (important)
+:: compiled binaries raises exception for images > 1800 pixels in any dimension
+:: color images need to be converted to grayscale (important)
+:: perform important conversions before executing SIFT on the image
+
+2. Getting keypoints
+:: command: siftWin32 < (target PGM file) > (destination .key file)
+:: The file format:
+
+<File START>
+<a, b>: 2 integers giving the total number of keypoints <a> and the length of the descriptor vector for each keypoint (128) <b>.
+<<a> entries>:
+	<c, d, e, f>: Then the location of each keypoint in the image is specified by 4 floating point numbers giving subpixel row and column location <c, d>, scale <e>, and orientation (in radians from -PI to PI) <f>.  Obviously, these numbers are not invariant to viewpoint, but can be used in later stages of processing to check for geometric consistency among matches.
+
+	<numbers 1, 2, ..., 127, 128>:
+	Finally, the invariant descriptor vector for the keypoint is given as a list of 128 integers in range [0,255].  Keypoints from a new image can be matched to those from previous images by simply looking for the descriptor vector with closest Euclidean distance among all vectors from previous images.
+<File END>
+
+3. Running the comparison:
+:: command: match -im1 <img_1>.pgm -k1 <img_1>.key -im2 <img_2>.pgm -k2 <img_2>.key > out.pgm
+Will print out number of matches.
+
+
+

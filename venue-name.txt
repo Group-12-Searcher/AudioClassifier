@@ -1,0 +1,30 @@
+1	City
+2	Theme Park
+3	Neighborhood
+4	Other Outdoors
+5	Park
+6	Beach
+7	Music Venue
+8	Airport
+9	University
+10	Baseball
+11	Home
+12	Football
+13	Stadium
+14	Mall
+15	Basketball
+16	Art Museum
+17	Concert Hall
+18	Nightclub
+19	Zoo
+20	Entertainment
+21	Travel
+22	Plaza / Square
+23	Hockey
+24	Hotel
+25	Rock Club
+26	Landmark
+27	Soccer
+28	Historic Site
+29	Resort
+30	Other - Buildings
