@@ -25,7 +25,8 @@ if __name__ == '__main__':
         shutil.rmtree(newpath)
     if not os.path.exists(newpath):
         os.makedirs(newpath)
-    
+
+    #s = 0
     for audioFile in glob.glob("*.wav"):
         audioTime = getAudioDuration(audioFile)
         os.chdir("../..")
@@ -34,29 +35,19 @@ if __name__ == '__main__':
         exe = "./ffmpeg"
         audioFileArg = "../../" + FILE_PATH_AUDIO_TO_CONVERT + "/" + audioFile
         rate = audioTime / TARGET_DURATION
-        # = "\"atempo=" + str(rate) + "\""
+        
+        if (rate < 0.5):
+            rate = 0.5
         rateArg = "atempo=" + str(rate)
         outputFileArg = "../../" + FILE_PATH_AUDIO_TO_CONVERT + "/" + newpath + "/" + audioFile
         
         args = [exe, "-i", audioFileArg, "-filter:a", rateArg, "-vn", outputFileArg]
         #print (args)
         
-        #lineToRun = "./ffmpeg -i "
-        #lineToRun += "../../" + FILE_PATH_AUDIO_TO_CONVERT + "/" + audioFile
-        #lineToRun += " -filter:a \"atempo="
-
-        #rate = audioTime / TARGET_DURATION
-        #lineToRun += str(rate) + "\" -vn "
-        #lineToRun += "../../" + FILE_PATH_AUDIO_TO_CONVERT + "/" + newpath + "/" + audioFile
-             
-        
-        # print (lineToRun)
-        #args = [exe, '-im1', im1, '-k1', k1, '-im2', im2, '-k2', k2]
-                #FNULL = open(os.devnull, 'w')
-
-                #p = subprocess.Popen(args, stdout=FNULL, stderr=subprocess.PIPE)
-        #FNULL = open(os.devnull, 'w')
-        p = subprocess.Popen(args)
+        FNULL = open(os.devnull, 'w')
+        p = subprocess.Popen(args, stdout=FNULL, stderr=FNULL, shell =False)
+        #s += 1
+        #print ("Completed: " + str(s))
         
         os.chdir("../..")
         os.chdir(FILE_PATH_AUDIO_TO_CONVERT)
