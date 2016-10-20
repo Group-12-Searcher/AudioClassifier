@@ -70,7 +70,7 @@ if __name__ == '__main__':
     storageFolderpath = "feature/acoustic/"
 
     ### CONSTANT VARIABLES ###
-    FIXED_DATALENGTH = 300   # The length of a data after doing zero-padding
+    FIXED_DATALENGTH = 310   # The length of a data after doing zero-padding
     MFCC_NUMVECTORS = 13   # The default number of vectors of a MFCC feature
     SPECT_NUMVECTORS = 82    # The default number of vectors of a spect feature (we ignore the last 46 vectors, which are all zeros)
     MFCCMEAN_NUMGROUP_PERVECTOR = 20   # We split each MFCC vector into 20 groups, and then get the mean of each group
