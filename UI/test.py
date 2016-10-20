@@ -31,7 +31,7 @@ class UI_class:
         self.query_img_frame = Frame(self.master)
         self.query_img_frame.pack()
         from tkFileDialog import askopenfilename
-        self.filename = tkFileDialog.askopenfile(title='Choose an Video File').name
+        self.filename = tkFileDialog.askopenfile(title='Choose a Video File', initialdir=self.search_path).name
 
         allframes = os.listdir(self.frame_storing_path)
         self.videoname = self.filename.strip().split("/")[-1].replace(".mp4","")
@@ -75,13 +75,8 @@ class UI_class:
         if self.columns == 0:
             print("Please extract the key frames for the selected video first!!!")
         else:
-            # Please note that, you need to write your own classifier to estimate the venue category to show blow.
-            if self.videoname == '1':
-               venue_text = "Home"
-            elif self.videoname == '2':
-                venue_text = 'Bridge'
-            elif self.videoname == '4':
-                venue_text = 'Park'
+            # Please note that, you need to write your own classifier to estimate the venue category to show below.
+            venue_text = 'Dummy venue' # To change with result.
 
             venue_img = Image.open("venue_background.jpg")
             draw = ImageDraw.Draw(venue_img)
@@ -101,4 +96,4 @@ class UI_class:
 
 
 root = Tk()
-window = UI_class(root,search_path='../data/video/', frame_storing_path='../data/frame/')
+window = UI_class(root,search_path='../presentation/', frame_storing_path='../data/frame/')
