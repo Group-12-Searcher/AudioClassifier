@@ -71,6 +71,7 @@ if __name__ == '__main__':
 
     ### CONSTANT VARIABLES ###
     FIXED_DATALENGTH = 260   # The length of a data after doing zero-padding
+
     MFCC_NUMVECTORS = 13   # The default number of vectors of a MFCC feature
     SPECT_NUMVECTORS = 82    # The default number of vectors of a spect feature (we ignore the last 46 vectors, which are all zeros)
     MFCCMEAN_NUMGROUP_PERVECTOR = 20   # We split each MFCC vector into 20 groups, and then get the mean of each group
@@ -91,7 +92,7 @@ if __name__ == '__main__':
     if getEnergy: print("\tRMS Energy")
     print("-----------------------------------")
 
-    numFiles = 0   # Set the number of audio files used (Set to 0 to use ALL available files)
+    numFiles = 90   # Set the number of audio files used (Set to 0 to use ALL available files)
     if numFiles <= 0:
         print("Gathering data from ALL audio files...")
     else:
@@ -105,9 +106,14 @@ if __name__ == '__main__':
     spectMeanData = []
     dataLengths = []   # Stores the data lengths of all audio files
     s = 0   # Track the number of files that have been processed
+    startIndex = 0
     
     os.chdir(audioFolderpath)
     for audioFile in glob.glob("*.wav"):
+        if s < startIndex:
+            s += 1
+            continue
+        
         audioFile = audioFile.replace("\\", "/")
         feature_mfcc, feature_spect, feature_zero, feature_energy, dataLength = getAcousticFeatures(
             audioFile, getMfccMean, getSpectMean, getZero, getEnergy)
