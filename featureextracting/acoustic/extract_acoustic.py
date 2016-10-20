@@ -66,11 +66,11 @@ if __name__ == '__main__':
     os.chdir("../../")
     
     ### YOU CAN CHANGE THIS TO YOUR OWN FOLDERS' PATHS ###
-    audioFolderpath = "vine/trainingAudio/"
+    audioFolderpath = "vine/trainingAudio/converted"
     storageFolderpath = "feature/acoustic/"
 
     ### CONSTANT VARIABLES ###
-    FIXED_DATALENGTH = 300   # The length of a data after doing zero-padding
+    FIXED_DATALENGTH = 260   # The length of a data after doing zero-padding
     MFCC_NUMVECTORS = 13   # The default number of vectors of a MFCC feature
     SPECT_NUMVECTORS = 82    # The default number of vectors of a spect feature (we ignore the last 46 vectors, which are all zeros)
     MFCCMEAN_NUMGROUP_PERVECTOR = 20   # We split each MFCC vector into 20 groups, and then get the mean of each group
@@ -216,7 +216,7 @@ if __name__ == '__main__':
         if s == numFiles: break
         
     print("Max Data Length:", max(dataLengths))
-    os.chdir("../../")
+    os.chdir("../../../")
 
     ### WRITE RESULTS TO CSV FILES ###
     os.chdir(storageFolderpath)
