@@ -96,4 +96,4 @@ class UI_class:
 
 
 root = Tk()
-window = UI_class(root,search_path='../presentation/', frame_storing_path='../data/frame/')
+window = UI_class(root,search_path='../presentation/', frame_storing_path='../presentation/frame/')
