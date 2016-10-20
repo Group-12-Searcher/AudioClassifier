@@ -4,7 +4,10 @@ vine/trainingAudio/converted/*.wav
 vine/validation/*.mp4
 vine/training/*.wav
 vine/validationAudio/*.wav
+vine/validationAudio/converted/*.wav
 **/*.DS_Store
 ffmpeg-3.1.4-win64-static/
-feature/acoustic/*.csv
+feature/acoustic/train/*.csv
+feature/acoustic/validate/*.csv
+*.csv
 
