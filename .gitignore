@@ -7,3 +7,5 @@ vine/training/*.wav
 ffmpeg-3.1.4-win64-static/
 feature/acoustic/*.csv
 vine/validationAudio/*.wav
+preprocessing/*.pyc
+*.pyc
