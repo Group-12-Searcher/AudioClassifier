@@ -2,4 +2,5 @@ vine/training/*.mp4
 vine/validation/*.mp4
 vine/training/*.wav
 vine/trainingAudio/*.wav
+vine/validationAudio/*.wav
 **/*.DS_Store
