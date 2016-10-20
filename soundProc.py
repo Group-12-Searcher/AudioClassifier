@@ -21,7 +21,8 @@ if __name__ == '__main__':
 
     
     newpath = 'converted'
-    shutil.rmtree(newpath)
+    if os.path.exists(newpath):
+        shutil.rmtree(newpath)
     if not os.path.exists(newpath):
         os.makedirs(newpath)
     
