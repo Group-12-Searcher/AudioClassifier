@@ -1,60 +1,67 @@
-__author__ = 'xiangwang1223@gmail.com'
-
 import numpy as np
 import scipy.io as sio
 from sklearn import svm
 from sklearn.metrics import classification_report
+import os
 
 # Trian your own classifier.
 # Here is the simple implementation of SVM classification.
-def mySVM(mat_path, output_path):
-    # 1. Load matricies from the .mat file, including X_train, X_test, Y_train, Y_gnd;
-    mat_contents = sio.loadmat(mat_path)
+def mySVM():
+    os.chdir("../")
 
-    # 2. X_train with instance_num * feature_num dimensions, and its corresponding venue labels Y_train
-    #    with instance_num * class_num dimensions.
-    #    As well as X_test, and its label matrix Y_gnd.
-    X_train = np.asmatrix(mat_contents['X_train'])
-    Y_train = np.asmatrix(mat_contents['Y_train'])
+    print("Loading training data...")
+    mfccTrainData = np.loadtxt("feature/acoustic/train/mfccMean.csv", delimiter=",")
+    spectTrainData = np.loadtxt("feature/acoustic/train/spectMean.csv", delimiter=",")
+    zeroTrainData = np.loadtxt("feature/acoustic/train/zero.csv", delimiter=",")
+    energyTrainData = np.loadtxt("feature/acoustic/train/energy.csv", delimiter=",")
+    X_train = np.concatenate((mfccTrainData, spectTrainData, zeroTrainData, energyTrainData), axis=1)
+    print(X_train.shape)
 
-    X_test  = np.asmatrix(mat_contents['X_test'])
-    Y_gnd  = np.asmatrix(mat_contents['Y_gnd'])
+    print("Loading training classfication...")
+    numFiles = X_train.shape[0]
+    fileIn = open("vine-venue-training-orderByName.txt", "r")
+    venues = []
+    i = 0
+    for line in fileIn:
+        if i == numFiles: break
+        venues.append(int(line.split("\t")[1].replace("\n", "")))
+        i += 1
+    fileIn.close()
+    Y_train = np.transpose(np.asarray(venues))
+    #print(Y_train)
+    print(Y_train.shape)
+
+    print("Loading test data...")
+    mfccTestData = np.loadtxt("feature/acoustic/validate/mfccMean.csv", delimiter=",")
+    spectTestData = np.loadtxt("feature/acoustic/validate/spectMean.csv", delimiter=",")
+    zeroTestData = np.loadtxt("feature/acoustic/validate/zero.csv", delimiter=",")
+    energyTestData = np.loadtxt("feature/acoustic/validate/energy.csv", delimiter=",")
+    X_test = np.concatenate((mfccTestData, spectTestData, zeroTestData, energyTestData), axis=1)
+    print(X_test.shape)
+
     print('Data Load Done.')
 
-    # 3. Generate the predicted label matrix Y_predicted for X_test via SVM or other classifiers.
-    instance_num, class_num = Y_gnd.shape
+    print("Preparing output matrix...")
+    Y_predicted = np.zeros([X_test.shape[0]])
+    print(Y_predicted.shape)
 
-    Y_predicted = np.asmatrix(np.zeros([instance_num, class_num]))
-
-    # 4. Train the classifier.
-    model = svm.SVR(kernel='rbf', degree=3, gamma=0.1, shrinking=True, verbose=False, max_iter=-1)
+    print("Training classifier...")
+    #model = svm.SVR(kernel='rbf', degree=3, gamma=0.1, shrinking=True, verbose=False, max_iter=-1)
+    model = svm.SVC(kernel='linear', C=1.0, degree=3, shrinking=True, verbose=False)
     model.fit(X_train, Y_train)
-    Y_predicted = np.asmatrix(model.predict(X_test))
+
+    print("Predicting classes for test data...")
+    Y_predicted = np.asarray(model.predict(X_test))
+    #Y_scores = model.decision_function(X_test)
     print('SVM Train Done.')
 
-    #print (float(np.ravel(Y_gnd)))
-    Y_gnd2 = []
-    for x in Y_gnd:
-        Y_gnd2.append(int(x))
-    #print (Y_gnd2)
-    #print (np.ravel(Y_predicted))
-    Y_predicted2 = []
-    for x in np.ravel(Y_predicted):
-        #print ("in")
-        Y_predicted2.append(int(x))
-    #print (Y_gnd2)
-    #print(float(Y_gnd))
-    #print (np.ravel(Y_predicted))
-    print (Y_gnd2)
-    print (Y_predicted2)
-    print(classification_report(Y_gnd2, Y_predicted2))
-
-    # 5. Save the predicted results and ground truth.
-    sio.savemat(output_path, {'Y_predicted': Y_predicted, 'Y_gnd': Y_gnd})
+    print("Prediction result:")
+    print(Y_predicted)
+    print("Saving result...")
+    np.savetxt("prediction.csv", Y_predicted, delimiter=",")
+    #np.savetxt("prediction_scores.csv", Y_scores, delimiter=",")
+    print("Done!")
 
 
 if __name__ == '__main__':
-    mat_path = 'Sample.mat'
-    output_path = 'Output.mat'
-
-    mySVM(mat_path, output_path)
+    mySVM()
