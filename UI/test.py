@@ -81,7 +81,7 @@ class UI_class:
             venue_img = Image.open("venue_background.jpg")
             draw = ImageDraw.Draw(venue_img)
 
-            font = ImageFont.truetype("arial.ttf",size=66)
+            font = ImageFont.truetype("arial.ttf",size=30)
 
             draw.text((50,50), venue_text, (0, 0, 0), font=font)
 
