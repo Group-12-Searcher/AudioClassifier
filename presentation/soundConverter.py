@@ -37,6 +37,7 @@ for audioFile in glob.glob("*.wav"):
         
     FNULL = open(os.devnull, 'w')
     p = subprocess.Popen(args, stdout=FNULL, stderr=FNULL, shell =False)
+    p.wait()
         
     os.chdir("../..")
     os.chdir(FILE_PATH_AUDIO_TO_CONVERT)

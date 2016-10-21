@@ -8,14 +8,17 @@ sys.path.append(os.getcwd())
 from featureextracting.acoustic.extract_acoustic import getAcousticFeatures
 os.chdir("presentation")
 
-subprocess.call("python preprocessVideos.py")
+p1 = subprocess.Popen("python preprocessVideos.py")
+p1.wait()
 
-os.chdir("../")
+os.chdir("../presentation")
 print ("converting audio files to uniform files")
-subprocess.call("python soundConverter.py")
+
+p2 = subprocess.Popen("python soundConverter.py")
+p2.wait()
 
 def generateCSV():
-    audioFolderpath = "presentation/converted"
+    audioFolderpath = "converted"
 
     ### CONSTANT VARIABLES ###
     FIXED_DATALENGTH = 260   # The length of a data after doing zero-padding
