@@ -46,7 +46,8 @@ def mySVM():
     sports = [10,12,13,15,23,27]
     music = [7,17,18,25]
     categories = [veryNoisy, sometimesNoisy, notVeryNoisy, mostlyQuiet, sports, music]
-    
+
+    numGroups = 6
     X_train_list = [[],[],[],[],[],[]]
     Y_train_list = [[],[],[],[],[],[]]
     X_test_list = [[],[],[],[],[],[]]
@@ -61,7 +62,7 @@ def mySVM():
         if i == numFiles: break
         lineSplit = line.split("\t")
         v = int(lineSplit[1].replace("\n", ""))
-        for j in range(6):
+        for j in range(numGroups):
             if v in categories[j]:
                 venues.append(j+1)
                 X_train_list[j].append(X_train[i])
@@ -81,7 +82,7 @@ def mySVM():
         lineSplit = line.split("\t")
         f = int(lineSplit[0])
         v = int(lineSplit[1].replace("\n", ""))
-        for j in range(6):
+        for j in range(numGroups):
             if v in categories[j]:
                 venues.append(j+1)
                 '''X_test_list[j].append(X_test[i])
@@ -127,7 +128,7 @@ def mySVM():
     fileIn.close()
 
     totalhits = 0
-    for i in range(6):
+    for i in range(numGroups):
         print "Training classifier for group", i+1
         model = svm.SVC(kernel='linear', C=0.0001, degree=3, shrinking=True, verbose=False)
         model.fit(X_train_list[i], Y_train_list[i])
