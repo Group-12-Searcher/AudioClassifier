@@ -181,9 +181,9 @@ def generateCSV():
                 
             spectMeanData.append(meanData)  # Add data to result
 
-        generateMapping(audioFile, s)
         s += 1
         audioName = audioFile.split("/")[-1].split(".")[0]
+        generateMapping(audioName + ".mp4", s-1)
         print("{}) {}.wav Done. Data Length: {}".format(s, audioName, dataLength))
         dataLengths.append(dataLength)
         
