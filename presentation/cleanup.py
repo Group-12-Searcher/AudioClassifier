@@ -13,4 +13,6 @@ for frames in glob.glob("frame/*.jpg"):
 print ("Removing wav files (converted)...")
 for wavFile in glob.glob("converted/*.wav"):
     os.remove(wavFile)
+print ("Remove text file for mapping")
+os.remove("nameToIndex.txt")
 print ("All cleanup done... Ready for presentation!")
