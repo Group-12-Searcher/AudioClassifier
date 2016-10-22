@@ -66,6 +66,7 @@ def mySVM():
 
     numFiles = X_test.shape[0]
     fileIn = open("vine-venue-validation-orderByName.txt", "r")
+    groups = []
     venues = []
     i = 0
     for line in fileIn:
@@ -75,10 +76,12 @@ def mySVM():
         v = int(lineSplit[1].replace("\n", ""))
         for j in range(numGroups):
             if v in categories[j]:
-                venues.append(j+1)
+                groups.append(j+1)
+                venues.append(v)
                 break
         i += 1
     fileIn.close()
+    Y_groupTruth = np.transpose(np.asarray(groups))
     Y_truth = np.transpose(np.asarray(venues))
 
     print('Data Load Done.')
@@ -95,12 +98,17 @@ def mySVM():
     Y_predicted = np.asarray(model.predict(X_test))
     grouphits = 0
     for i in range(numFiles):
-        if Y_predicted[i] == Y_truth[i]:
+        if Y_predicted[i] == Y_groupTruth[i]:
             grouphits += 1
+
+    groupPrediction = []
+    for i in range(Y_predicted.shape[0]):
+        groupPrediction.append(Y_predicted[i])
+    print groupPrediction
     
     print('SVM Train Done.')
     print("Classification report:")
-    print(classification_report(Y_truth, Y_predicted))
+    print(classification_report(Y_groupTruth, Y_predicted))
 
     fileIn = open("vine-venue-validation-orderByName.txt", "r")
     i = 0
@@ -118,7 +126,7 @@ def mySVM():
     fileIn.close()
 
     totalhits = 0
-    topRankings = []
+    topRankings = [[],[],[],[],[],[]]
     for i in range(numGroups):
         print "Training classifier for group", i+1
         if len(X_test_list[i]) == 0:
@@ -154,28 +162,56 @@ def mySVM():
 
             while len(ranking) < numGroups:
                 ranking.append(0)
-            topRankings.append(ranking)
+            topRankings[i].append(ranking)
             
         print "Number of hits:", hit, "/", k
         totalhits += hit
+        #print topRankings
         
         print("Saving result...")
         prediction = np.transpose(np.vstack((np.asmatrix(Y_files_list[i]), Y_predicted, np.asmatrix(Y_truth_list[i]))))
         np.savetxt("prediction_group"+str(i+1)+".csv", prediction, delimiter=",")
         np.savetxt("prediction_group"+str(i+1)+"_scores.csv", Y_scores, delimiter=",")
 
-    np.savetxt("toprankings.csv", np.array(topRankings), delimiter=",")
+    finalRanking = []
+    k = len(groupPrediction)
+    for i in range(k):
+        #print i+1, groupPrediction[i]-1
+        #print topRankings[Y_predicted[i]-1]
+        finalRanking.append(topRankings[groupPrediction[i]-1][0])
+        del topRankings[groupPrediction[i]-1][0]
+
+
+    np.savetxt("toprankings.csv", np.array(finalRanking), delimiter=",")
         
-    print "\nGrand total number of hits:", totalhits, "/ 900"
-    print "Number of group hits:", grouphits, "/ 900"
-    
-    '''
-    print("Saving result...")
-    print Y_files.shape, Y_predicted.shape, Y_truth.shape
-    result = np.transpose(np.vstack((Y_files, Y_predicted, Y_truth)))
-    np.savetxt("prediction.csv", result, delimiter=",")
-    np.savetxt("prediction_scores.csv", Y_scores, delimiter=",")   
-    '''
+    print "\nTotal number of hits:", totalhits, "/ 900"
+    print "Total number of group hits:", grouphits, "/ 900"
+
+    hitReport = [[0,0] for i in range(30)]
+    for i in range(900):
+        prediction = finalRanking[i][0]
+        truth = Y_truth[i]
+        #print prediction, truth
+        if prediction == truth:
+            hitReport[truth-1][0] += 1
+            hitReport[truth-1][1] += 1
+        else:
+            predictionGroup = 0
+            truthGroup = 0
+            for j in range(numGroups):
+                if prediction in categories[j]:
+                    predictionGroup = j+1
+                    break
+            for j in range(numGroups):
+                if truth in categories[j]:
+                    truthGroup = j+1
+                    break
+            if predictionGroup == truthGroup:
+                hitReport[truth-1][1] += 1
+
+    print "Number of hits / groups hits per venue:"
+    for i in range(30):
+        print i+1, "-", hitReport[i]
     
     print("Done!")
 
