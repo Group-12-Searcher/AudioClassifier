@@ -1,5 +1,6 @@
 import subprocess
 import os
+import os.path
 import sys
 import glob
 import numpy as np
@@ -17,7 +18,19 @@ print ("converting audio files to uniform files")
 p2 = subprocess.Popen("python soundConverter.py")
 p2.wait()
 
+mappingFile = 'nameToIndex.txt'
+
+def prepareMapFile():
+    if os.path.isfile(mappingFile):
+        os.remove(mappingFile)
+
+def generateMapping(name, index):
+    mappingFile = '../nameToIndex.txt'
+    with open(mappingFile, 'a') as mapFile: #append to the file
+        mapFile.write(str(name) + " " + str(index) + "\n")        
+
 def generateCSV():
+    prepareMapFile()
     audioFolderpath = "converted"
 
     ### CONSTANT VARIABLES ###
@@ -168,6 +181,7 @@ def generateCSV():
                 
             spectMeanData.append(meanData)  # Add data to result
 
+        generateMapping(audioFile, s)
         s += 1
         audioName = audioFile.split("/")[-1].split(".")[0]
         print("{}) {}.wav Done. Data Length: {}".format(s, audioName, dataLength))
