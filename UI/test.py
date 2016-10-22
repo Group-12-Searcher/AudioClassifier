@@ -25,7 +25,7 @@ class UI_class:
 
         #Buttons
         topspace = Label(topframe).grid(row=0, columnspan=2)
-        self.bbutton= Button(topframe, text=" Choose an video ", command=self.browse_query_img)
+        self.bbutton= Button(topframe, text=" Choose a video ", command=self.browse_query_img)
         self.bbutton.grid(row=1, column=1)
         self.cbutton = Button(topframe, text=" Estimate its venue ", command=self.show_venue_category)
         self.cbutton.grid(row=1, column=2)
@@ -51,10 +51,9 @@ class UI_class:
 
         allframes = os.listdir(self.frame_storing_path)
         self.videoname = self.filename.strip().split("/")[-1].replace(".mp4","")
-
         self.frames = []
         for frame in allframes:
-            if self.videoname +"-frame" in frame:
+            if (self.videoname +"-" == frame[:2] or self.videoname == frame[:2]):
                 self.frames.append(self.frame_storing_path + frame)
 
         COLUMNS = len(self.frames)
@@ -99,14 +98,16 @@ class UI_class:
             # Please note that, you need to write your own classifier to estimate the venue category to show below.
             predictions = predictSVM(self.filename)
             predictions_strings = []
-            classification_labels = ["1st:\n\n", "2nd:\n\n", "3rd:\n\n", "4th:\n\n", "5th:\n\n"]
+            classification_labels = ["1st:\n\n", "2nd:\n\n", "3rd:\n\n", "4th:\n\n", "5th:\n\n", "6th:\n\n"]
             print(predictions)
             
             venue_text_primary = str(predictions[0]) # To change with result.
 
             for prediction in predictions:
                 for category in self.categories:
-                    if str(prediction) == category[0]:
+                    if (str(prediction) == 0):
+                        break
+                    elif str(prediction) == category[0]:
                         predictions_strings.append(category[1])
                         break
 
@@ -114,7 +115,7 @@ class UI_class:
 
             os.chdir("UI")
 
-            for i in range(5):
+            for i in range(len(predictions_strings)):
                 venue_img = Image.open("venue_background.jpg")
                 draw = ImageDraw.Draw(venue_img)
 
