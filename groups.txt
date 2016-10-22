@@ -1,0 +1,41 @@
+Very noisy
+1 City
+2 Theme Park
+21 Travel
+22 Plaza / Square
+26 Landmark
+
+Sometimes noisy
+3 Neighbourhood
+4 Other Outdoors
+9 University
+14 Mall
+20 Entertainment
+
+Not very noisy
+5 Park
+6 Beach
+8 Airport
+19 Zoo
+28 Historic Site
+
+Mostly quiet
+11 Home
+16 Art Museum
+24 Hotel
+29 Resort
+30 Other - Buildings
+
+Sports
+10 Baseball
+12 Football
+13 Stadium
+15 Basketball
+23 Hockey
+27 Soccer
+
+Loud Music
+7 Music Venue
+17 Concert Hall
+18 Nightclub
+25 Rock Club
