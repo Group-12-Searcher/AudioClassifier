@@ -17,7 +17,7 @@ def mySVM():
     zeroTrainData = np.loadtxt("feature/acoustic/"+trainFolder+"/zero.csv", delimiter=",")
     energyTrainData = np.loadtxt("feature/acoustic/"+trainFolder+"/energy.csv", delimiter=",")
     #X_train = np.concatenate((mfccTrainData, spectTrainData, zeroTrainData, energyTrainData), axis=1)
-    X_train = np.concatenate((mfccTrainData, energyTrainData), axis=1)
+    X_train = np.concatenate((spectTrainData, mfccTrainData), axis=1)
     print(X_train.shape)
     
     print("Loading test data...")
@@ -26,7 +26,7 @@ def mySVM():
     zeroTestData = np.loadtxt("feature/acoustic/"+validateFolder+"/zero.csv", delimiter=",")
     energyTestData = np.loadtxt("feature/acoustic/"+validateFolder+"/energy.csv", delimiter=",")
     #X_test = np.concatenate((mfccTestData, spectTestData, zeroTestData, energyTestData), axis=1)
-    X_test = np.concatenate((mfccTestData, energyTestData), axis=1)
+    X_test = np.concatenate((spectTestData, mfccTestData), axis=1)
     print(X_test.shape)
 
     numFiles = X_test.shape[0]
@@ -79,7 +79,7 @@ def mySVM():
         print("Training classifier...")
         #model = svm.SVR(kernel='rbf', degree=3, gamma=0.1, shrinking=True, verbose=False, max_iter=-1)
         #model = svm.SVC(kernel='linear', C=1.0)
-        model = svm.LinearSVC(C=1.0)
+        model = svm.LinearSVC(C=0.0000001)
         model.fit(X_train, Y_train)
 
         print("Predicting classes for test data...")
