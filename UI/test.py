@@ -53,7 +53,7 @@ class UI_class:
         self.videoname = self.filename.strip().split("/")[-1].replace(".mp4","")
         self.frames = []
         for frame in allframes:
-            if (self.videoname +"-" == frame[:2] or self.videoname == frame[:2]):
+            if (self.videoname == frame.split("-")[0]):
                 self.frames.append(self.frame_storing_path + frame)
 
         COLUMNS = len(self.frames)
