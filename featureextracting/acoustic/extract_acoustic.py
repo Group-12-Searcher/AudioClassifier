@@ -92,7 +92,7 @@ if __name__ == '__main__':
     if getEnergy: print("\tRMS Energy")
     print("-----------------------------------")
 
-    numFiles = 90   # Set the number of audio files used (Set to 0 to use ALL available files)
+    numFiles = 0   # Set the number of audio files used (Set to 0 to use ALL available files)
     if numFiles <= 0:
         print("Gathering data from ALL audio files...")
     else:
@@ -106,14 +106,9 @@ if __name__ == '__main__':
     spectMeanData = []
     dataLengths = []   # Stores the data lengths of all audio files
     s = 0   # Track the number of files that have been processed
-    startIndex = 0
     
     os.chdir(audioFolderpath)
     for audioFile in glob.glob("*.wav"):
-        if s < startIndex:
-            s += 1
-            continue
-        
         audioFile = audioFile.replace("\\", "/")
         feature_mfcc, feature_spect, feature_zero, feature_energy, dataLength = getAcousticFeatures(
             audioFile, getMfccMean, getSpectMean, getZero, getEnergy)
