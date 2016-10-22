@@ -95,6 +95,7 @@ class UI_class:
             print("Please extract the key frames for the selected video first!!!")
         else:
             self.hasPreviousQuery = True
+            self.filename = self.filename.split("/")[-1]
             # Please note that, you need to write your own classifier to estimate the venue category to show below.
             predictions = predictSVM(self.filename)
             predictions_strings = []
